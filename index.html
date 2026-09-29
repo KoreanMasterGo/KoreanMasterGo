@@ -10,47 +10,58 @@
 :root{--bg1:#0b2140;--bg2:#0e3a63;--tank1:#12588f;--tank2:#082744;--fg:#eaf4ff;--accent:#ffd166;--accent2:#ffb703;--danger:#ef476f;--good:#2dd4bf}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-html,body{margin:0;height:100%;background:radial-gradient(circle at 50% -10%,var(--bg2),var(--bg1));color:var(--fg);font-family:'Jua','Segoe UI',sans-serif;overscroll-behavior:none}
-body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-#hud{display:flex;gap:10px;padding:12px 14px;font-size:15px;align-items:center;flex-wrap:wrap}
-#hud span{background:linear-gradient(#ffffff26,#ffffff10);padding:6px 14px;border-radius:20px;display:flex;gap:6px;align-items:center;box-shadow:inset 0 0 0 1px #ffffff22}
-#tank{position:relative;margin:0 12px;height:52vh;background:linear-gradient(var(--tank1),var(--tank2));border-radius:20px;overflow:hidden;touch-action:manipulation;box-shadow:inset 0 0 40px #00000066,0 0 0 3px #ffffff1a}
+html,body{margin:0;height:100%;background:var(--bg1);color:var(--fg);font-family:'Jua','Segoe UI',sans-serif;overscroll-behavior:none}
+#app{display:flex;height:100vh;overflow:hidden;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+#sidebar{width:108px;flex:0 0 auto;background:#0a1c33;padding:12px 8px;display:flex;flex-direction:column;gap:8px;box-shadow:2px 0 14px #00000055;z-index:4;overflow-y:auto}
+.pill{background:linear-gradient(#ffffff22,#ffffff0d);border-radius:14px;padding:8px 4px;text-align:center;font-size:12px;font-weight:700;box-shadow:inset 0 0 0 1px #ffffff22}
+.pill b{display:block;font-size:15px}
+#sidebar button{width:100%;padding:10px 4px;font-size:12px;border-radius:12px;background:linear-gradient(#ffffff26,#ffffff0d);color:var(--fg);border:none;font-family:inherit;font-weight:700;cursor:pointer;box-shadow:inset 0 0 0 1px #ffffff2a,0 3px 0 #00000033}
+#sidebar button:active{transform:translateY(2px);box-shadow:inset 0 0 0 1px #ffffff2a}
+#sidebar button.locked{opacity:.55}
+#main{flex:1;position:relative;padding:14px}
+#tank{position:absolute;inset:14px;background:linear-gradient(var(--tank1),var(--tank2));border-radius:20px;overflow:hidden;touch-action:manipulation;box-shadow:inset 0 0 50px #00000066,0 0 0 3px #ffffff1a}
+@media (max-width:640px){
+#app{flex-direction:column}
+#sidebar{width:100%;flex-direction:row;flex-wrap:wrap;align-items:center}
+.pill{flex:1 1 70px}
+#sidebar button{flex:1 1 70px;width:auto}
+#main{padding:10px}
+}
 .bubble{position:absolute;bottom:-20px;width:10px;height:10px;background:#ffffff40;border-radius:50%;animation:rise linear infinite}
-@keyframes rise{0%{transform:translateY(0);opacity:.8}100%{transform:translateY(-70vh);opacity:0}}
-.fish{position:absolute;cursor:pointer;user-select:none;transform:translate(-50%,-50%) scaleX(var(--dir,1));transition:left .12s linear,top .12s linear;filter:drop-shadow(0 3px 4px #00000055)}
+@keyframes rise{0%{transform:translateY(0);opacity:.8}100%{transform:translateY(-100%);opacity:0}}
+.seaweed{position:absolute;bottom:0;border-radius:45% 45% 4px 4px/65% 65% 4px 4px;transform-origin:bottom center;animation:sway ease-in-out infinite;background:linear-gradient(#3aa66b,#1f6b45)}
+@keyframes sway{0%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}100%{transform:rotate(-7deg)}}
+.rock{position:absolute;bottom:0;background:radial-gradient(circle at 30% 25%,#5b6b7a,#2c3841);border-radius:50% 50% 45% 45%/60% 60% 35% 35%}
+.reefEgg{position:absolute;bottom:2px;font-size:26px;opacity:.9;filter:drop-shadow(0 2px 3px #00000066)}
+.fish{position:absolute;cursor:pointer;user-select:none;transform:translate(-50%,-50%) scaleX(var(--dir,1));transition:left .12s linear,top .12s linear;filter:drop-shadow(0 3px 4px #00000055);z-index:2}
 .fish.hungry{filter:drop-shadow(0 3px 4px #00000055) grayscale(0.7) brightness(0.65)}
 .fish.eating{animation:eat .35s ease}
 @keyframes eat{0%{transform:translate(-50%,-50%) scaleX(var(--dir,1)) scale(1)}40%{transform:translate(-50%,-50%) scaleX(var(--dir,1)) scale(1.3)}100%{transform:translate(-50%,-50%) scaleX(var(--dir,1)) scale(1)}}
-.growthbar{position:absolute;width:30px;height:5px;background:#00000055;border-radius:4px;transform:translate(-50%,0);overflow:hidden;transition:left .12s linear,top .12s linear}
+.growthbar{position:absolute;width:30px;height:5px;background:#00000055;border-radius:4px;transform:translate(-50%,0);overflow:hidden;transition:left .12s linear,top .12s linear;z-index:2}
 .growthbar i{display:block;height:100%;background:var(--good);width:0%}
-.food{position:absolute;width:12px;height:12px;background:radial-gradient(#fff6c8,#ffd166);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 6px #ffd16688}
-.coin{position:absolute;font-size:24px;transform:translate(-50%,-50%);cursor:pointer;animation:pop .25s ease}
+.food{position:absolute;width:12px;height:12px;background:radial-gradient(#fff6c8,#ffd166);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 6px #ffd16688;z-index:2}
+.coin{position:absolute;font-size:24px;transform:translate(-50%,-50%);cursor:pointer;animation:pop .25s ease;z-index:2}
 @keyframes pop{0%{transform:translate(-50%,-50%) scale(0.2)}100%{transform:translate(-50%,-50%) scale(1)}}
-.invader{position:absolute;font-size:34px;transform:translate(-50%,-50%);cursor:pointer;animation:ibob 1.4s ease-in-out infinite;filter:drop-shadow(0 3px 6px #000000aa)}
+.invader{position:absolute;font-size:34px;transform:translate(-50%,-50%);cursor:pointer;animation:ibob 1.4s ease-in-out infinite;filter:drop-shadow(0 3px 6px #000000aa);z-index:2}
 @keyframes ibob{0%{transform:translate(-50%,-50%) translateY(0)}50%{transform:translate(-50%,-50%) translateY(-8px)}100%{transform:translate(-50%,-50%) translateY(0)}}
-.hpbar{position:absolute;width:40px;height:6px;background:#00000066;border-radius:4px;transform:translate(-50%,0);overflow:hidden}
+.hpbar{position:absolute;width:40px;height:6px;background:#00000066;border-radius:4px;transform:translate(-50%,0);overflow:hidden;z-index:2}
 .hpbar i{display:block;height:100%;background:var(--danger)}
 .floatText{position:absolute;font-weight:700;pointer-events:none;transform:translate(-50%,-50%);animation:floatUp .9s ease forwards;text-shadow:0 2px 4px #000000cc;white-space:nowrap;z-index:3}
 @keyframes floatUp{0%{transform:translate(-50%,-50%) translateY(0) scale(1);opacity:1}100%{transform:translate(-50%,-50%) translateY(-55px) scale(1.1);opacity:0}}
-#bottombar{display:flex;gap:8px;padding:12px;justify-content:center;flex-wrap:wrap;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
-button{background:linear-gradient(#ffffff26,#ffffff0d);color:var(--fg);border:none;padding:11px 16px;border-radius:14px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:inset 0 0 0 1px #ffffff2a,0 3px 0 #00000033}
-button:active{transform:translateY(2px);box-shadow:inset 0 0 0 1px #ffffff2a}
-#shopPanel{max-height:0;overflow:hidden;transition:max-height .25s ease;margin:0 12px 14px}
-#shopPanel.open{max-height:70vh;overflow-y:auto}
-#shopInner{background:linear-gradient(#173a5e,#0e2846);border-radius:18px;padding:16px;box-shadow:inset 0 0 0 1px #ffffff1a}
+#shopPanel{position:fixed;top:0;left:0;height:100vh;width:360px;max-width:90vw;background:linear-gradient(#173a5e,#0e2846);transform:translateX(-120%);transition:transform .25s ease;z-index:6;overflow-y:auto;box-shadow:6px 0 30px #00000066;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+#shopPanel.open{transform:translateX(0)}
+#shopInner{padding:16px}
 .panelHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.panelHeader span{font-size:17px}
-.closeBtn{padding:6px 12px;border-radius:10px}
+.panelHeader span{font-size:18px}
+.closeBtn{padding:6px 12px;border-radius:10px;background:linear-gradient(#ffffff26,#ffffff0d);color:var(--fg);border:none;font-family:inherit;font-weight:700;cursor:pointer}
 h4{margin:14px 0 8px;font-size:14px;opacity:.85}
 .shopItem{display:flex;justify-content:space-between;align-items:center;padding:12px 10px;border-radius:14px;margin-bottom:8px;background:#ffffff0d;gap:8px}
 .shopItem .icon{font-size:24px;margin-right:8px}
 .shopItem .info{display:flex;align-items:center;flex:1;min-width:0}
 .shopItem small{opacity:.8;display:block;font-size:11px;line-height:1.5}
+.shopItem button{padding:10px 16px;border-radius:12px;background:linear-gradient(#ffffff26,#ffffff0d);color:var(--fg);border:none;font-family:inherit;font-weight:700;cursor:pointer;box-shadow:inset 0 0 0 1px #ffffff2a}
+.dexBonus{background:#ffffff14;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:12px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.speciesBtn{background:#ffffff0d;border-radius:12px;padding:10px 4px;text-align:center;cursor:pointer;border:none;color:var(--fg);font-family:inherit}
-.speciesBtn .emoji{font-size:26px;display:block}
-.speciesBtn .nm{font-size:11px;display:block;margin-top:2px}
-.speciesBtn .cost{font-size:10px;opacity:.8;display:block;margin-top:3px;color:var(--accent)}
 .dexCard{background:#ffffff0d;border-radius:12px;padding:10px 4px;text-align:center}
 .dexCard.locked{opacity:.35}
 .dexCard .emoji{font-size:26px;display:block}
@@ -61,30 +72,34 @@ h4{margin:14px 0 8px;font-size:14px;opacity:.85}
 </style>
 </head>
 <body>
-<div id="hud">
-<span>🪙 <b id="coinDisplay">0</b></span>
-<span>💎 <b id="diaDisplay">0</b></span>
-<span>🐠 <b id="fishDisplay">0</b></span>
-</div>
-<div id="tank"></div>
-<div id="bottombar">
+<div id="app">
+<div id="sidebar">
+<div class="pill">🪙<b id="coinDisplay">0</b></div>
+<div class="pill">💎<b id="diaDisplay">0</b></div>
+<div class="pill">🐠<b id="fishDisplay">0</b></div>
 <button onclick="openPanelTab('shop')">🛒 상점</button>
 <button onclick="openPanelTab('dex')">📖 도감</button>
-<button onclick="feedAll()">🍤 먹이주기</button>
+<button id="feedBtn" onclick="onFeedAllClick()">🔒 먹이주기</button>
+</div>
+<div id="main">
+<div id="tank"></div>
+</div>
 </div>
 <div id="shopPanel">
 <div id="shopInner">
-<div class="panelHeader"><span id="panelTitle">상점</span><button class="closeBtn" onclick="closePanel()">✕</button></div>
+<div class="panelHeader"><span id="panelTitle">🛒 상점</span><button class="closeBtn" onclick="closePanel()">✕</button></div>
 <div id="tabShopContent">
 <h4>업그레이드</h4>
 <div class="shopItem"><div class="info"><span class="icon">🍤</span><div>먹이 업그레이드<br><small id="feedCostText"></small></div></div><button onclick="buyFeed()">구매</button></div>
 <div class="shopItem"><div class="info"><span class="icon">🔫</span><div>무기 업그레이드<br><small id="weaponCostText"></small></div></div><button onclick="buyWeapon()">구매</button></div>
 <div class="shopItem"><div class="info"><span class="icon">📈</span><div>코인 부스트<br><small id="coinBoostCostText"></small></div></div><button onclick="buyCoinBoost()">구매</button></div>
 <div class="shopItem"><div class="info"><span class="icon">💎</span><div>다이아 부스트<br><small id="diaBoostCostText"></small></div></div><button onclick="buyDiaBoost()">구매</button></div>
+<div class="shopItem" id="feedUnlockItem"><div class="info"><span class="icon">🍽</span><div>먹이주기 기능 해금<br><small>다이아 20 · 한 번에 여러 마리 먹이기</small></div></div><button onclick="buyFeedUnlock()">해금</button></div>
 <h4>물고기 구매</h4>
-<div id="speciesGrid" class="grid"></div>
+<div class="shopItem"><div class="info"><span class="icon">🐟</span><div>새끼 물고기 (랜덤 종류)<br><small id="fishCostText"></small></div></div><button onclick="buyRandomFish()">구매</button></div>
 </div>
 <div id="tabDexContent" style="display:none">
+<div class="dexBonus" id="dexBonusText"></div>
 <div id="dexGrid" class="grid"></div>
 </div>
 </div>
@@ -92,43 +107,47 @@ h4{margin:14px 0 8px;font-size:14px;opacity:.85}
 <div id="toast"></div>
 <script>
 var SPECIES=[
-{name:'금붕어',emoji:'🐟',cost:15,mult:1},
-{name:'열대어',emoji:'🐠',cost:45,mult:1.25},
-{name:'복어',emoji:'🐡',cost:75,mult:1.5},
-{name:'새우',emoji:'🦐',cost:95,mult:1.7},
-{name:'게',emoji:'🦀',cost:120,mult:1.9},
-{name:'문어',emoji:'🐙',cost:150,mult:2.2},
-{name:'오징어',emoji:'🦑',cost:180,mult:2.5},
-{name:'랍스터',emoji:'🦞',cost:220,mult:2.9},
-{name:'거북이',emoji:'🐢',cost:280,mult:3.3},
-{name:'돌고래',emoji:'🐬',cost:360,mult:3.8},
-{name:'상어',emoji:'🦈',cost:460,mult:4.4},
-{name:'고래',emoji:'🐳',cost:600,mult:5.2}
+{name:'금붕어',emoji:'🐟',mult:1},
+{name:'열대어',emoji:'🐠',mult:1.25},
+{name:'복어',emoji:'🐡',mult:1.5},
+{name:'새우',emoji:'🦐',mult:1.7},
+{name:'게',emoji:'🦀',mult:1.9},
+{name:'문어',emoji:'🐙',mult:2.2},
+{name:'오징어',emoji:'🦑',mult:2.5},
+{name:'랍스터',emoji:'🦞',mult:2.9},
+{name:'거북이',emoji:'🐢',mult:3.3},
+{name:'돌고래',emoji:'🐬',mult:3.8},
+{name:'상어',emoji:'🦈',mult:4.4},
+{name:'고래',emoji:'🐳',mult:5.2}
 ];
 var tankEl=document.getElementById('tank');
 var coinDisplay=document.getElementById('coinDisplay');
 var diaDisplay=document.getElementById('diaDisplay');
 var fishDisplay=document.getElementById('fishDisplay');
 var toastEl=document.getElementById('toast');
+var fishCostTextEl=document.getElementById('fishCostText');
 var feedCostTextEl=document.getElementById('feedCostText');
 var weaponCostTextEl=document.getElementById('weaponCostText');
 var coinBoostCostTextEl=document.getElementById('coinBoostCostText');
 var diaBoostCostTextEl=document.getElementById('diaBoostCostText');
+var dexBonusTextEl=document.getElementById('dexBonusText');
 var panelTitleEl=document.getElementById('panelTitle');
-var speciesGridEl=document.getElementById('speciesGrid');
 var dexGridEl=document.getElementById('dexGrid');
+var feedBtnEl=document.getElementById('feedBtn');
+var feedUnlockItemEl=document.getElementById('feedUnlockItem');
 var coins=30;
 var diamonds=0;
 var feedLevel=1;
 var weaponLevel=1;
 var coinBoostLevel=0;
 var diaBoostLevel=0;
+var feedAllUnlocked=false;
 var fishSeq=0;
 var fishList=[];
 var invaders=[];
 var invaderTimer=8;
 var maxInvaders=4;
-var saveKey='fishTankSaveV4';
+var saveKey='fishTankSaveV5';
 var tankWidth=0;
 var tankHeight=0;
 var toastTimer=null;
@@ -138,7 +157,6 @@ var fallingFoods=[];
 var fallHandle=null;
 var speciesUnlocked=[];
 var speciesBestStage=[];
-var speciesButtons=[];
 var dexEntries=[];
 var activeTab='shop';
 
@@ -163,19 +181,47 @@ tankEl.appendChild(el);
 setTimeout(function(){el.remove()},900);
 }
 
-function speciesCost(i){
-var owned=0;
-for(var k=0;k<fishList.length;k++){if(fishList[k].species===i)owned++}
-return SPECIES[i].cost+owned*12;
+function dexBonus(){
+var count=0;
+for(var i=0;i<speciesUnlocked.length;i++){if(speciesUnlocked[i])count++}
+return 1+count*0.05;
 }
+
+function fishCost(){return 15+fishList.length*10}
 function feedCost(){return 40+feedLevel*30}
 function weaponCost(){return 3+weaponLevel*2}
 function coinBoostCost(){return 50+coinBoostLevel*60}
 function diaBoostCost(){return 5+diaBoostLevel*4}
 function sizeForStage(stage){return 22+stage*4}
 
-function makeBubbles(){
-for(var i=0;i<10;i++){
+function makeDecor(){
+for(var i=0;i<9;i++){
+var s=document.createElement('div');
+s.className='seaweed';
+var h=30+Math.random()*40;
+s.style.width=(10+Math.random()*6)+'px';
+s.style.height=h+'px';
+s.style.left=(Math.random()*94)+'%';
+s.style.animationDuration=(2.4+Math.random()*2)+'s';
+tankEl.appendChild(s);
+}
+for(var j=0;j<4;j++){
+var r=document.createElement('div');
+r.className='rock';
+var w=30+Math.random()*40;
+r.style.width=w+'px';
+r.style.height=(w*0.6)+'px';
+r.style.left=(Math.random()*90)+'%';
+tankEl.appendChild(r);
+}
+var egg=document.createElement('div');
+egg.className='reefEgg';
+egg.textContent='🍍';
+egg.style.right='14px';
+egg.style.left='auto';
+egg.title='???';
+tankEl.appendChild(egg);
+for(var k=0;k<10;k++){
 var b=document.createElement('div');
 b.className='bubble';
 b.style.left=(Math.random()*100)+'%';
@@ -185,21 +231,13 @@ tankEl.appendChild(b);
 }
 }
 
-function buildGrids(){
+function buildDex(){
 for(var i=0;i<SPECIES.length;i++){
-(function(i){
-var btn=document.createElement('button');
-btn.className='speciesBtn';
-btn.innerHTML='<span class="emoji">'+SPECIES[i].emoji+'</span><span class="nm">'+SPECIES[i].name+'</span><span class="cost" id="spCost'+i+'"></span>';
-btn.onclick=function(){buyFish(i)};
-speciesGridEl.appendChild(btn);
-speciesButtons.push(document.getElementById('spCost'+i));
 var card=document.createElement('div');
 card.className='dexCard locked';
 card.innerHTML='<span class="emoji">❓</span><span class="nm">???</span><span class="stage"></span>';
 dexGridEl.appendChild(card);
 dexEntries.push(card);
-})(i);
 }
 }
 
@@ -223,7 +261,7 @@ var f={id:fishSeq,stage:stage,species:species,progress:0,hunger:0,el:wrap,bar:ba
 applyStageClass(f);
 positionBar(f);
 fishList.push(f);
-if(!speciesUnlocked[species]){speciesUnlocked[species]=true;toast('도감 등록! '+SPECIES[species].name)}
+if(!speciesUnlocked[species]){speciesUnlocked[species]=true;toast('도감 등록! '+SPECIES[species].name+' · 코인 보너스 +5%')}
 if(stage>speciesBestStage[species])speciesBestStage[species]=stage;
 return f;
 }
@@ -311,8 +349,17 @@ spawnFood(x,10);
 }
 }
 
+function onFeedAllClick(){
+if(!feedAllUnlocked){
+toast('상점에서 먹이주기 기능을 먼저 해금하세요');
+openPanelTab('shop');
+return;
+}
+feedAll();
+}
+
 function spawnCoin(f){
-var base=(5+f.stage*4)*SPECIES[f.species].mult*(1+coinBoostLevel*0.2);
+var base=(5+f.stage*4)*SPECIES[f.species].mult*(1+coinBoostLevel*0.2)*dexBonus();
 var value=Math.round(base)+feedLevel*2;
 var coinEl=document.createElement('div');
 coinEl.className='coin';
@@ -427,14 +474,16 @@ function updateHud(){
 coinDisplay.textContent=coins;
 diaDisplay.textContent=diamonds;
 fishDisplay.textContent=fishList.length;
+fishCostTextEl.textContent='구매가 '+fishCost()+'코인 · 12종 중 랜덤 지급';
 feedCostTextEl.textContent='구매가 '+feedCost()+'코인 · 성장치 +'+feedLevel+' → +'+(feedLevel+1)+' · 코인보너스 +'+(feedLevel*2)+' → +'+((feedLevel+1)*2);
 weaponCostTextEl.textContent='구매가 '+weaponCost()+'다이아 · 공격력 '+weaponLevel+' → '+(weaponLevel+1);
 coinBoostCostTextEl.textContent='구매가 '+coinBoostCost()+'코인 · 코인 배율 x'+(1+coinBoostLevel*0.2).toFixed(1)+' → x'+(1+(coinBoostLevel+1)*0.2).toFixed(1);
 diaBoostCostTextEl.textContent='구매가 '+diaBoostCost()+'다이아 · 처치보상 +'+(1+diaBoostLevel)+' → +'+(2+diaBoostLevel);
+var unlockedCount=0;
 for(var i=0;i<SPECIES.length;i++){
-speciesButtons[i].textContent=speciesCost(i)+'코인';
 var card=dexEntries[i];
 if(speciesUnlocked[i]){
+unlockedCount++;
 card.classList.remove('locked');
 card.innerHTML='<span class="emoji">'+SPECIES[i].emoji+'</span><span class="nm">'+SPECIES[i].name+'</span><span class="stage">최고 Lv.'+(speciesBestStage[i]+1)+'</span>';
 }else{
@@ -442,15 +491,20 @@ card.classList.add('locked');
 card.innerHTML='<span class="emoji">❓</span><span class="nm">???</span><span class="stage"></span>';
 }
 }
+dexBonusTextEl.textContent='도감 수집 '+unlockedCount+'/'+SPECIES.length+' · 코인 보너스 +'+(unlockedCount*5)+'%';
+feedBtnEl.textContent=feedAllUnlocked?'🍤 먹이주기':'🔒 먹이주기';
+feedBtnEl.classList.toggle('locked',!feedAllUnlocked);
+feedUnlockItemEl.style.display=feedAllUnlocked?'none':'flex';
 }
 
-function buyFish(i){
-var cost=speciesCost(i);
+function buyRandomFish(){
+var cost=fishCost();
 if(coins<cost){toast('코인이 부족해요');return}
 coins-=cost;
-createFish(0,i);
+var idx=Math.floor(Math.random()*SPECIES.length);
+createFish(0,idx);
 updateHud();
-toast(SPECIES[i].name+' 입양!');
+toast(SPECIES[idx].name+' 입양!');
 }
 
 function buyFeed(){
@@ -489,6 +543,15 @@ updateHud();
 toast('다이아 부스트 업그레이드!');
 }
 
+function buyFeedUnlock(){
+if(feedAllUnlocked)return;
+if(diamonds<20){toast('다이아가 부족해요');return}
+diamonds-=20;
+feedAllUnlocked=true;
+updateHud();
+toast('먹이주기 기능 해금!');
+}
+
 function openPanelTab(tab){
 var panel=document.getElementById('shopPanel');
 var isOpen=panel.classList.contains('open');
@@ -518,6 +581,7 @@ feedLevel:feedLevel,
 weaponLevel:weaponLevel,
 coinBoostLevel:coinBoostLevel,
 diaBoostLevel:diaBoostLevel,
+feedAllUnlocked:feedAllUnlocked,
 speciesUnlocked:speciesUnlocked,
 speciesBestStage:speciesBestStage,
 fish:fishList.map(function(f){return {stage:f.stage,species:f.species,progress:f.progress,hunger:f.hunger,x:f.x,y:f.y}})
@@ -538,6 +602,7 @@ feedLevel=data.feedLevel||1;
 weaponLevel=data.weaponLevel||1;
 coinBoostLevel=data.coinBoostLevel||0;
 diaBoostLevel=data.diaBoostLevel||0;
+feedAllUnlocked=data.feedAllUnlocked||false;
 if(data.speciesUnlocked)speciesUnlocked=data.speciesUnlocked;
 if(data.speciesBestStage)speciesBestStage=data.speciesBestStage;
 var list=data.fish||[];
@@ -569,8 +634,8 @@ spawnFood(x,y);
 window.onload=function(){
 tankWidth=tankEl.clientWidth;
 tankHeight=tankEl.clientHeight;
-makeBubbles();
-buildGrids();
+makeDecor();
+buildDex();
 var loaded=loadGame();
 if(!loaded){
 createFish(0,0);
